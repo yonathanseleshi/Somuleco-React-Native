@@ -8,7 +8,12 @@
 
 import React, {Component} from 'react';
 import {Platform, StyleSheet, Text, View, TextInput, Button, DrawerLayoutAndroid} from 'react-native';
+import {connect} from 'react-redux';
+import {userAuthenticated, userLoggedOut} from './store/actions/actionIndex'
+
+import DrawerLayout from 'react-native-gesture-handler/DrawerLayout';
 import SideMenu from 'react-native-side-menu';
+import {LearningFeed} from './components/authenticated/LearningFeed'
 
 const instructions = Platform.select({
   ios: 'Press Cmd+R to reload,\n' + 'Cmd+D or shake for dev menu',
@@ -18,27 +23,109 @@ const instructions = Platform.select({
 });
 
 type Props = {};
-export default class App extends Componen<Props> {
-  render() {
+class App extends Component<Props> {
 
-      var navigationView = (
-          <View style={{flex: 1, backgroundColor: '#fff'}}>
-              <Text style={{margin: 10, fontSize: 15, textAlign: 'left'}}>I'm in the Drawer!</Text>
-          </View>
-      );
+  state = {
+
+      authenticated: null
+  };
+
+
+
+     navigationView = (
+        <View style={{flex: 1, backgroundColor: '#fff'}}>
+            <Text style={{margin: 10, fontSize: 15, textAlign: 'left'}}>I'm in the Drawer!</Text>
+        </View>
+    );
+
+    /*
+    var iosDrawer = (
+
+        <View style={{flex: 1, backgroundColor: '#fff'}}>
+
+            <Text style={{margin: 10, fontSize: 15, textAlign: 'left'}}> IOS Drawer!</Text>
+        </View>
+
+    );
+
+    var androidDrawer = (
+
+
+
+        <DrawerLayoutAndroid
+            drawerWidth={300}
+            drawerPosition={DrawerLayoutAndroid.positions.Left}
+            renderNavigationView={() => navigationView}>
+
+            <View style={{flex: 1, alignItems: 'center'}}>
+                <Text style={{margin: 10, fontSize: 15, textAlign: 'right'}}>Hello</Text>
+                <Text style={{margin: 10, fontSize: 15, textAlign: 'right'}}>World!</Text>
+            </View>
+
+        </DrawerLayoutAndroid>
+
+
+    );
+
+    const Drawer = Platform.select({
+
+        ios: () => iosDrawer,
+        android: () => androidDrawer
+
+
+    })
+
+
+     */
+     renderDrawer = () => {
+        return (
+            <View>
+                <Text>I am in the drawer!</Text>
+            </View>
+        );
+    };
+
+
+     authenticateUser = () => {
+
+            this.props.onAuthenticated()
+
+
+     }
+
+     logOut = () => {
+
+
+         this.props.onLogOut()
+     }
+
+
+    render(){
+
+
+
 
     return (
-          <DrawerLayoutAndroid
-          drawerWidth={300}
-          drawerPosition={DrawerLayoutAndroid.positions.Left}
-          renderNavigationView={() => navigationView}>
 
-          <View style={{flex: 1, alignItems: 'center'}}>
-              <Text style={{margin: 10, fontSize: 15, textAlign: 'right'}}>Hello</Text>
-              <Text style={{margin: 10, fontSize: 15, textAlign: 'right'}}>World!</Text>
-          </View>
 
-      </DrawerLayoutAndroid>
+
+        <View style={{flex: 1}}>
+
+            <DrawerLayout
+                drawerWidth={200}
+                drawerPosition={DrawerLayout.positions.LEFT}
+                drawerType='front'
+                drawerBackgroundColor="#ddd"
+                renderNavigationView={this.renderDrawer}>
+                <View>
+                    <Text>
+                        Hello, it's me
+                    </Text>
+                </View>
+            </DrawerLayout>
+        </View>
+
+
 
     );
   }
@@ -62,3 +149,24 @@ const styles = StyleSheet.create({
     marginBottom: 5,
   },
 });
+
+const mapStateToProps = (state) => {
+
+    return {
+
+        isAuthenticated: state.authenticatedUser.isAuthenticated
+    };
+
+};
+
+const mapDispatchToProps = (dispatch) => {
+
+        return {
+
+            onAuthenticated: () => dispatch(userAuthenticated()),
+            onLogOut: ()=> dispatch(userLoggedOut())
+        }
+
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(App);
