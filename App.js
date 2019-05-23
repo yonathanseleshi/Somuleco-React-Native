@@ -9,11 +9,13 @@
 import React, {Component} from 'react';
 import {Platform, StyleSheet, Text, View, TextInput, Button, DrawerLayoutAndroid} from 'react-native';
 import {connect} from 'react-redux';
+import {Realm} from 'realm';
 import {userAuthenticated, userLoggedOut} from './store/actions/actionIndex'
 
 import DrawerLayout from 'react-native-gesture-handler/DrawerLayout';
 import SideMenu from 'react-native-side-menu';
 import {LearningFeed} from './components/authenticated/LearningFeed'
+
 
 const instructions = Platform.select({
   ios: 'Press Cmd+R to reload,\n' + 'Cmd+D or shake for dev menu',
@@ -27,7 +29,8 @@ class App extends Component<Props> {
 
   state = {
 
-      authenticated: null
+      authenticated: null,
+      realm: null
   };
 
 
